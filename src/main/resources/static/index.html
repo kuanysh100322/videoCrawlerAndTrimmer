@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AI Video Trimmer</title>
+
+    <style>
+
+        *{
+        box-sizing:border-box;
+        margin:0;
+        padding:0;
+        }
+
+        body{
+        font-family: Inter, Arial, sans-serif;
+        background: linear-gradient(135deg,#111827,#1e293b);
+        height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        color:white;
+        }
+
+        .card{
+        width:760px;
+        background:#ffffff;
+        color:#111827;
+        padding:42px;
+        border-radius:28px;
+        box-shadow:
+        0 20px 60px rgba(0,0,0,.35);
+        }
+
+        h1{
+        font-size:38px;
+        margin-bottom:8px;
+        }
+
+        .subtitle{
+        color:#64748b;
+        margin-bottom:35px;
+        font-size:17px;
+        }
+
+        label{
+        display:block;
+        font-weight:600;
+        margin-bottom:10px;
+        margin-top:18px;
+        }
+
+        input,textarea{
+        width:100%;
+        border:2px solid #dbe2ea;
+        background:#f8fafc;
+        border-radius:16px;
+        padding:18px 20px;
+        font-size:16px;
+        outline:none;
+        transition:.25s;
+        }
+
+        input:focus,
+        textarea:focus{
+        border-color:#3b82f6;
+        background:white;
+        box-shadow:0 0 0 4px rgba(59,130,246,.15);
+        }
+
+        textarea{
+        height:130px;
+        resize:none;
+        }
+
+        button{
+        margin-top:28px;
+        width:100%;
+        padding:18px;
+        border:none;
+        border-radius:18px;
+        font-size:18px;
+        font-weight:700;
+        background:linear-gradient(
+        90deg,
+        #2563eb,
+        #7c3aed
+        );
+        color:white;
+        cursor:pointer;
+        transition:.25s;
+        }
+
+        button:hover{
+        transform:translateY(-2px);
+        box-shadow:
+        0 10px 25px rgba(37,99,235,.35);
+        }
+
+        .status{
+        margin-top:24px;
+        padding:18px;
+        border-radius:16px;
+        background:#eef4ff;
+        color:#1e3a8a;
+        font-weight:600;
+        }
+
+        .badges{
+        margin-bottom:18px;
+        display:flex;
+        gap:12px;
+        }
+
+        .badge{
+        background:#eef2ff;
+        color:#4338ca;
+        padding:8px 14px;
+        border-radius:999px;
+        font-size:13px;
+        font-weight:700;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="badges">
+        <div class="badge">AI</div>
+        <div class="badge">Video Search</div>
+        <div class="badge">Auto Trimming</div>
+    </div>
+
+    <h1>
+        AI-Powered Video Crawler
+    </h1>
+
+    <div class="subtitle">
+        Paste a YouTube link and describe
+        what part of the video to extract.
+    </div>
+
+
+    <label>
+        YouTube URL
+    </label>
+
+    <input
+            id="url"
+            placeholder="https://youtube.com/watch?v=..."
+    >
+
+
+    <label>
+        Extraction Request
+    </label>
+
+    <textarea
+            id="query"
+            placeholder="Example: Find the section discussing GPU benchmarks and performance"
+    ></textarea>
+
+
+    <button onclick="runDemo()">
+        Analyze & Trim Video
+    </button>
+
+
+    <div
+            class="status"
+            id="status"
+    >
+        Ready.
+    </div>
+
+</div>
+
+
+<script>
+
+    async function runDemo(){
+
+    document.getElementById(
+    "status"
+    ).innerHTML=
+    "Analyzing video...";
+
+    const url=
+    document.getElementById(
+    "url"
+    ).value;
+
+    const query=
+    document.getElementById(
+    "query"
+    ).value;
+
+    const response=
+    await fetch(
+    "/analyze",
+    {
+    method:"POST",
+    headers:{
+    "Content-Type":
+    "application/json"
+    },
+    body:JSON.stringify({
+    url:url,
+    query:query
+    })
+    }
+    );
+
+    const result=
+    await response.text();
+
+    document.getElementById(
+    "status"
+    ).innerHTML=result;
+
+    }
+
+</script>
+
+</body>
+</html>
